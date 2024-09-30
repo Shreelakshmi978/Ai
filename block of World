@@ -25,4 +25,34 @@ from collections import deque
  
  def bfs(initial_state, goal_state): 
      queue = deque([(initial_state, [])])   
-      visited 
+      visited = set()
+
+    while queue:
+        current_state, actions = queue.popleft()
+        if current_state.is_goal(goal_state):
+            return current_state, actions  # Return both state and actions
+
+        visited.add(str(current_state))
+
+        for move, action in current_state.get_possible_moves():
+            if str(move) not in visited:
+                queue.append((move, actions + [action]))  # Add the new action to the path
+
+    return None
+
+initial_stacks = [['B','A'], ['C'], ['D']]
+goal_stacks = [['C','A'], [] ,['B','D']]
+
+initial_state = State(initial_stacks)
+goal_state = State(goal_stacks)
+
+solution, actions = bfs(initial_state, goal_state)
+
+if solution:
+    print("Solution found:", solution)
+    print("Actions taken:")
+    for action in actions:
+        print(action)
+else:
+    print("No solution found.")
+
